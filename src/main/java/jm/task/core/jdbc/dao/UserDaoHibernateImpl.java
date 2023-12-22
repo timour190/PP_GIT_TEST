@@ -78,7 +78,7 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                System.out.println("Транзакция удаления по ID не удалась");
             }
         }
     }
