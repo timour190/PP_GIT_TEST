@@ -11,7 +11,7 @@ import java.util.List;
 public class UserDaoHibernateImpl implements UserDao {
     // SessionFactory session;
     public UserDaoHibernateImpl() {
-        //session = session.openSession().getSessionFactory();
+        //session = session.openSession().getSessionFactory();//todo: SessionFactory - заносим в класс -  Util.getSessionFactory(). B методах, да - уже получаем каждый раз сессию в ресурсе
     }
 
     User user = new User();
@@ -71,7 +71,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void removeUserById(long id) {
         Transaction transaction = null;
-        User user = null;
+        User user = null;//todo: codeStyle
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             user = session.get(User.class, id);
