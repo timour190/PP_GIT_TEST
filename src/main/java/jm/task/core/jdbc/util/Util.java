@@ -15,14 +15,13 @@ import java.util.Properties;
 
 public class Util {
 
-    private static final String dbUrl = "jdbc:mysql://localhost:3306/usersbase";
+    private static final String dbUrl = "jdbc:mysql://localhost:3306/userbase;";   //"usersbase";
     private static final String dbUserName = "root";
-    private static final String DB_PASS = "my179sql";//todo: codeStyle ..переменные правильно проставляем ..все 123456789
+    private static final String dbPass = "root"; //"my179sql";
     Driver driver = new com.mysql.cj.jdbc.Driver();
     private static SessionFactory sessionFactory;
 
     public Util() throws SQLException {
-        //  connection = getConnection();//todo: зачем, если не используем?
     }
 
     public static SessionFactory getSessionFactory() {
@@ -31,9 +30,9 @@ public class Util {
                 Configuration configuration = new Configuration();
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/usersbase?useSSL=false");
+                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/userbase?useSSL=false");
                 settings.put(Environment.USER, "root");
-                settings.put(Environment.PASS, DB_PASS);//todo: codeStyle
+                settings.put(Environment.PASS, dbPass);
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
 
                 settings.put(Environment.SHOW_SQL, "true");
@@ -65,7 +64,7 @@ public class Util {
         try {
             Driver driver = new com.mysql.cj.jdbc.Driver();
             DriverManager.registerDriver(driver);
-            connection = DriverManager.getConnection(dbUrl, dbUserName, DB_PASS);
+            connection = DriverManager.getConnection(dbUrl, dbUserName, dbPass);
         } catch (SQLException e) {
             System.out.println("Соединение не установлено или ошибка соединения");
         }

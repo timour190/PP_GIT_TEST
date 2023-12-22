@@ -3,7 +3,7 @@ package jm.task.core.jdbc.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users", schema = "users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -29,10 +29,6 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public void setId(Long id) {
