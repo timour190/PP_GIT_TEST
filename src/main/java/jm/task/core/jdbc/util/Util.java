@@ -36,7 +36,7 @@ public class Util {
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Ошибка создания/настройки sessionFactory");
             }
         }
         return sessionFactory;
@@ -65,9 +65,7 @@ public class Util {
     private Connection connection;
 
     public Connection getConnection() {
-        connection = null;
         try {
-            Driver driver = new com.mysql.cj.jdbc.Driver();
             DriverManager.registerDriver(driver);
             connection = DriverManager.getConnection(dbUrl, dbUserName, dbPass);
         } catch (SQLException e) {

@@ -10,9 +10,12 @@ import java.util.List;
 public class UserDaoJDBCImpl implements UserDao  {
     Connection connection;
 
-    private static final String createUsersQuery = "CREATE TABLE users(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR (50), lastName VARCHAR (50), age INT(3))";
-
-
+    private static final String createUsersQuery = "CREATE TABLE IF NOT EXISTS users(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR (50), lastName VARCHAR (50), age INT(3))";
+    private static final String dropUsersTable = "DROP TABLE users";
+    private static final String insertIntoUsers = "INSERT INTO users (name, lastName, age) values (?, ?, ?)";
+    private static final String deleteFromUsersId = "DELETE FROM users WHERE id = ?";
+    private static final String selectFromUsers = "select * FROM users";
+    private static final String deleteFromUsers = "DELETE FROM users";
     public UserDaoJDBCImpl() {
         try {
             connection = new Util().getConnection();
@@ -33,7 +36,7 @@ public class UserDaoJDBCImpl implements UserDao  {
     @Override
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE users");
+            statement.execute(dropUsersTable);
         } catch (SQLException e) {
             throw new IllegalStateException("Invalid dropUsersTable: " + e.getMessage());
         }
@@ -41,7 +44,7 @@ public class UserDaoJDBCImpl implements UserDao  {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, lastName, age) values (?, ?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement(insertIntoUsers)) {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setInt(3, age);
@@ -53,7 +56,7 @@ public class UserDaoJDBCImpl implements UserDao  {
 
     @Override
     public void removeUserById(long id) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement(deleteFromUsersId)) {
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -64,7 +67,7 @@ public class UserDaoJDBCImpl implements UserDao  {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        try (ResultSet resultSet = connection.createStatement().executeQuery("select * FROM users")) {
+        try (ResultSet resultSet = connection.createStatement().executeQuery(selectFromUsers)) {
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong(1));
@@ -82,7 +85,7 @@ public class UserDaoJDBCImpl implements UserDao  {
     @Override
     public void cleanUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("DELETE FROM users");
+            statement.execute(deleteFromUsers);
         } catch (SQLException e) {
             throw new IllegalStateException("Invalid cleanUsersTable: " + e.getMessage());
         }
